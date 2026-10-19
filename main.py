@@ -135,6 +135,24 @@ def root_info():
     }
 
 
+@app.get("/{full_path:path}", include_in_schema=False)
+def catch_all_spa(full_path: str):
+    if (
+        full_path.startswith("api/")
+        or full_path.startswith("docs")
+        or full_path.startswith("redoc")
+        or full_path.startswith("openapi.json")
+        or full_path.startswith("assets/")
+        or full_path.startswith("css/")
+        or full_path.startswith("js/")
+    ):
+        return JSONResponse(status_code=404, content={"detail": "Not Found"})
+    dist_index = dist_dir / "index.html"
+    if dist_index.exists():
+        return FileResponse(dist_index)
+    return JSONResponse(content={"platform": settings.APP_NAME, "status": "operational"})
+
+
 if __name__ == "__main__":
     import os
     import uvicorn
