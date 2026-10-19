@@ -1,7 +1,7 @@
 from enum import Enum
 from datetime import datetime
 from typing import Optional, List, Dict, Any
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field
 
 
 class AnalyzeRequest(BaseModel):
@@ -42,7 +42,7 @@ class ExportFormat(str, Enum):
 
 
 class UserRegisterRequest(BaseModel):
-    email: EmailStr
+    email: str = Field(..., description="User email address")
     password: str = Field(min_length=6)
     full_name: Optional[str] = None
 
